@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1j7g1f6" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.17.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.20.0">
+  <bpmn:process id="new_hiring_custom_form_process" name="New Hiring Process with custom form" isExecutable="true" camunda:historyTimeToLive="180">
+    <bpmn:startEvent id="StartEvent_1" name="Start">
+      <bpmn:outgoing>Flow_1uflb2i</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_1uflb2i" sourceRef="StartEvent_1" targetRef="Activity_submit_new_application" />
+    <bpmn:exclusiveGateway id="Gateway_1m73tpb" name="Check Experience">
+      <bpmn:incoming>Flow_16zejx9</bpmn:incoming>
+      <bpmn:outgoing>Flow_0f7706c</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1ehmdcy</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_16zejx9" sourceRef="Activity_submit_new_application" targetRef="Gateway_1m73tpb" />
+    <bpmn:sequenceFlow id="Flow_0f7706c" name="Experience &#60;= 0" sourceRef="Gateway_1m73tpb" targetRef="Activity_Approval_For_Fresher">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression"> ${number_year_of_experience&lt;=0}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:exclusiveGateway id="Gateway_0fe6x4k" name="Approval ?">
+      <bpmn:incoming>Flow_09o7zl9</bpmn:incoming>
+      <bpmn:outgoing>Flow_1tm74i9</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0p3yq1s</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_09o7zl9" sourceRef="Activity_Approval_For_Fresher" targetRef="Gateway_0fe6x4k" />
+    <bpmn:sequenceFlow id="Flow_1tm74i9" name="Yes" sourceRef="Gateway_0fe6x4k" targetRef="Activity_Interview">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression"> ${select_approval  ==  1}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1ehmdcy" name="Experience &#62; 0" sourceRef="Gateway_1m73tpb" targetRef="Activity_Interview">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression"> ${number_year_of_experience&gt;0}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:userTask id="Activity_submit_new_application" name="Submit New Application" camunda:formKey="embedded:app:forms/new_hiriing_detail_custom_form.html" camunda:assignee="nilesh" camunda:candidateUsers="nilesh">
+      <bpmn:extensionElements />
+      <bpmn:incoming>Flow_1uflb2i</bpmn:incoming>
+      <bpmn:outgoing>Flow_16zejx9</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Activity_Approval_For_Fresher" name="Approval For Fresher" camunda:formRef="Form_new_hiring_approval" camunda:formRefBinding="latest" camunda:assignee="hr" camunda:candidateUsers="hr">
+      <bpmn:incoming>Flow_0f7706c</bpmn:incoming>
+      <bpmn:outgoing>Flow_09o7zl9</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Activity_Interview" name="Interview" camunda:formRef="Form_interview_result" camunda:formRefBinding="latest" camunda:assignee="parikshit" camunda:candidateUsers="parikshit">
+      <bpmn:incoming>Flow_1tm74i9</bpmn:incoming>
+      <bpmn:incoming>Flow_1ehmdcy</bpmn:incoming>
+      <bpmn:outgoing>Flow_0fxyy0n</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:endEvent id="Event_03mniry" name="End">
+      <bpmn:incoming>Flow_0fxyy0n</bpmn:incoming>
+      <bpmn:incoming>Flow_0p3yq1s</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_0fxyy0n" sourceRef="Activity_Interview" targetRef="Event_03mniry" />
+    <bpmn:sequenceFlow id="Flow_0p3yq1s" name="No" sourceRef="Gateway_0fe6x4k" targetRef="Event_03mniry">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression"> ${select_approval == 0}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="new_hiring_custom_form_process">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="179" y="79" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="185" y="122" width="25" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1m73tpb_di" bpmnElement="Gateway_1m73tpb" isMarkerVisible="true">
+        <dc:Bounds x="425" y="72" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="405" y="42" width="90" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0fe6x4k_di" bpmnElement="Gateway_0fe6x4k" isMarkerVisible="true">
+        <dc:Bounds x="785" y="72" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="784" y="42" width="52" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1ta97p6_di" bpmnElement="Activity_submit_new_application">
+        <dc:Bounds x="270" y="57" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0mgpaby_di" bpmnElement="Activity_Approval_For_Fresher">
+        <dc:Bounds x="590" y="57" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_06hj8ms_di" bpmnElement="Activity_Interview">
+        <dc:Bounds x="760" y="240" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_03mniry_di" bpmnElement="Event_03mniry">
+        <dc:Bounds x="972" y="262" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="980" y="305" width="20" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1uflb2i_di" bpmnElement="Flow_1uflb2i">
+        <di:waypoint x="215" y="97" />
+        <di:waypoint x="270" y="97" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_16zejx9_di" bpmnElement="Flow_16zejx9">
+        <di:waypoint x="370" y="97" />
+        <di:waypoint x="425" y="97" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0f7706c_di" bpmnElement="Flow_0f7706c">
+        <di:waypoint x="475" y="97" />
+        <di:waypoint x="590" y="97" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="493" y="79" width="81" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_09o7zl9_di" bpmnElement="Flow_09o7zl9">
+        <di:waypoint x="690" y="97" />
+        <di:waypoint x="785" y="97" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1tm74i9_di" bpmnElement="Flow_1tm74i9">
+        <di:waypoint x="810" y="122" />
+        <di:waypoint x="810" y="240" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="817" y="178" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ehmdcy_di" bpmnElement="Flow_1ehmdcy">
+        <di:waypoint x="450" y="122" />
+        <di:waypoint x="450" y="280" />
+        <di:waypoint x="760" y="280" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="428" y="198" width="74" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0fxyy0n_di" bpmnElement="Flow_0fxyy0n">
+        <di:waypoint x="860" y="280" />
+        <di:waypoint x="972" y="280" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0p3yq1s_di" bpmnElement="Flow_0p3yq1s">
+        <di:waypoint x="835" y="97" />
+        <di:waypoint x="990" y="97" />
+        <di:waypoint x="990" y="262" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="906" y="79" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

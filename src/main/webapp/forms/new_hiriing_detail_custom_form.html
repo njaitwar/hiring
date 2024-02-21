@@ -1,0 +1,31 @@
+<form role="form" name="newHiringDetailSubmition" class="form-horizontal">
+
+	<div class="form-group">
+		<label class="control-label col-md-4" for="invoiceDocumentUpload">Upload your Resume</label>
+		<div class="col-md-8">
+			<input type="file" id="resumeDocumentUpload" cam-variable-name="resumeDocumentUpload"
+				cam-variable-type="File" cam-max-filesize="10000000" class="form-control" />
+			<div class="help-block">This field is required</div>
+		</div>
+	</div>
+
+
+
+	<div class="form-group">
+		<label class="control-label col-md-4" for="creditor">Application Name</label>
+		<div class="col-md-8">
+			<input cam-variable-name="textfield_app_name" cam-variable-type="String" id="textfield_app_name"
+				class="form-control" type="text" required />
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="control-label col-md-4" for="amount">Experience (in Year)</label>
+		<div class="col-md-8">
+			<input cam-variable-name="number_year_of_experience" cam-variable-type="Integer"
+				id="number_year_of_experience" name="number_year_of_experience" class="form-control" type="number"
+				required />
+		</div>
+	</div>
+
+</form>
